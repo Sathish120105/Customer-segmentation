@@ -1,0 +1,22 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+df = pd.read_csv("customers.csv")  # e.g. Age, Income, SpendingScore
+
+X = df[['Age', 'Annual Income (k$)', 'Spending Score (1-100)']]
+X_scaled = StandardScaler().fit_transform(X)
+
+kmeans = KMeans(n_clusters=4, random_state=0)
+labels = kmeans.fit_predict(X_scaled)
+
+df['Segment'] = labels
+print(df.head())
+
+# Plot clusters
+plt.scatter(X['Annual Income (k$)'], X['Spending Score (1-100)'], c=labels, cmap='rainbow')
+plt.xlabel("Income")
+plt.ylabel("Spending Score")
+plt.title("Customer Segments")
+plt.show()
